@@ -72,9 +72,9 @@ const getCategoryCount = (req)=>{
  */
 const findCategoryByCid = (req)=>{
     return new Promise((resolve, reject)=>{
-        category.find({_id: mongoose.Types.ObjectId(req.query.cid) }, (err, docs)=>{
+        category.findOne({_id: mongoose.Types.ObjectId(req.query.cid) }, (err, doc)=>{
             if(err)  return reject(new ErrorModel('查询失败！'))
-            resolve(new SuccessModel(docs[0]))
+            resolve(new SuccessModel(doc))
         })
     })
 }

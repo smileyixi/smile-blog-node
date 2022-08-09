@@ -77,7 +77,7 @@ const getCommentListByaid = (req, res) => {
  */
 const getCommnetCount = (req) => {
     return new Promise((resolve, reject)=> {
-        if(!req.query.id) {
+        if(!req.query.aid) {
             comments.find().count().exec((err, number)=>{
                 if (err) return reject(new ErrorModel(err))
                 resolve(new SuccessModel(number))
