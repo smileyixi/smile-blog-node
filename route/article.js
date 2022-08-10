@@ -1,6 +1,7 @@
-const { getArticleList, insertArticle, findArticleById, getArticleByUni, getNextById, getPreById, getArticleWithCategory, getArticleCount } = require('../func/article')
+const { updateArticle, removeArticle, getArticleList, insertArticle, findArticleById, getArticleByUni, getNextById, getPreById, getArticleWithCategory, getArticleCount } = require('../func/article')
 const express = require('express')
 const router = express.Router()
+const { jwtCheck } = require('../util/jwt')
 
 
 // 查询文章列表
@@ -40,11 +41,29 @@ router.get('/blog/cateArt', (req, res)=>{
 })
 
 // 新增文章
-router.post('/blog/new', (req, res)=>{
+router.post('/blog/new', jwtCheck, (req, res)=>{
     insertArticle(req, res).then(result=>{
         res.send(result)
     }).catch(err=>{
         res.status(400).send(err)
+    })
+})
+
+// 删除文章
+router.post('/blog/del', jwtCheck, (req, res)=>{
+    removeArticle(req, res).then(result=>{
+        res.send(result)
+    }).catch(err=>{
+        res.status(403).send(err)
+    })
+})
+
+// 更新文章
+router.post('/blog/update', jwtCheck, (req, res)=>{
+    updateArticle(req, res).then(result=>{
+        res.send(result)
+    }).catch(err=>{
+        res.status(403).send(err)
     })
 })
 

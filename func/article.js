@@ -212,6 +212,58 @@ const insertArticle = (req, res)=>{
     })
 }
 
+
+/**
+ * 删除文章
+ * @param {req} req 文章id
+ * @param {res} res  
+ * @returns
+ */
+ const removeArticle = (req, res)=>{
+    return new Promise((resolve, reject)=>{
+        const data = req.body
+        if(!data) {
+            return reject(new ErrorModel('删除文章失败！'))
+        }
+        contents.remove({_id: mongoose.Types.ObjectId(data.id)}).then(result=>{
+            // { n: 1, ok: 1 } n为1则成功
+            resolve(new SuccessModel(result))
+        }).catch(()=>{
+            reject(new ErrorModel('删除文章失败！'))
+        })
+    })
+}
+
+
+/**
+ * 更新文章
+ * @param {req} req 文章id
+ * @param {res} res  
+ * @returns
+ */
+ const updateArticle = (req, res)=>{
+    return new Promise((resolve, reject)=>{
+        const data = req.body
+        if(!data) {
+            return reject(new ErrorModel('更新文章失败！'))
+        }
+        return contents.findOneAndUpdate(
+            {   // 条件
+                _id: mongoose.Types.ObjectId(data._id)
+            },
+            {   // 更新
+                ...data
+            },
+            // {new: true} // 返回更新结果
+        ).then( ()=>{
+            resolve(new SuccessModel('更新文章成功'))
+        }).catch(()=>{
+            reject(new ErrorModel('删除文章失败！'))
+        })
+    })
+}
+
+
 /**
  * 查询next
  * @param {*} req 
@@ -237,7 +289,7 @@ const getNextById = (req)=>{
  */
  const getPreById = (req)=>{
     return new Promise((resolve, reject)=>{
-        contents.find({ '_id' :{ "$lt" :mongoose.Types.ObjectId(req.query.id)} }).exec((err, docs)=>{
+        contents.find({ '_id' :{ "$lt" : mongoose.Types.ObjectId(req.query.id)} }).exec((err, docs)=>{
             if(err)  return reject(new ErrorModel('查询失败！'))
             if(docs.length==0) return resolve(new SuccessModel({}))
             resolve(new SuccessModel({
@@ -270,5 +322,5 @@ const getArticleCount = (req) => {
 
 
 module.exports = {
-    getArticleList, insertArticle, findArticleById, getArticleByUni, getNextById, getPreById, getArticleWithCategory, getArticleCount
+    updateArticle, removeArticle, getArticleList, insertArticle, findArticleById, getArticleByUni, getNextById, getPreById, getArticleWithCategory, getArticleCount
 }

@@ -12,6 +12,8 @@ const users = mongoose.model("users", mongoose.Schema({
     autograph: {type: String},  // 个性签名
     email: {type: String},      // 个人邮箱
     usersite: {type: String},   // 用户网站
+    group: {type:String, default: 'guest'},  // 用户组，用于区分游客和管理员[只有管理员能设置] 待定
+    status: {type:Number, default: 1},       // 状态：0:标记为删除，1:可用
 }))
 
 // 设置表
@@ -44,6 +46,7 @@ const contents = mongoose.model("contents", mongoose.Schema({
     content: {type: String, required: true},
     createAt: {type: Date, default: Date.now()},
     hot: {type:Number, default: 10},
+    tags: {type:Array, default: ['日常']},  // 标签列表
     disComment: {type:Number, default: 0}  // 是否可以评论 1:开启；0禁用
 }))
 
